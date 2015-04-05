@@ -1,0 +1,85 @@
+!      [1]
+!     / | \
+!    /  |  \
+!   /  [4]  \
+!  /  /   \  \
+! [2]--------[3]
+!
+
+router bgp 1
+ bgp router-id 1.1.1.1
+ neighbor 2.2.2.2 remote-as 2
+ neighbor 2.2.2.2 advertisement-interval 30
+ neighbor 2.2.2.2 route-map 1pref2_2 in
+ neighbor 3.3.3.3 remote-as 3
+ neighbor 3.3.3.3 advertisement-interval 30
+ neighbor 3.3.3.3 route-map 1pref2_3 in
+ neighbor 4.4.4.4 remote-as 4
+ neighbor 4.4.4.4 advertisement-interval 30
+ neighbor 4.4.4.4 route-map 1pref2_4 in
+
+route-map 1pref2_2 permit 10
+ set local-preference 100
+
+route-map 1pref2_3 permit 10
+ set local-preference 10
+
+route-map 1pref2_4 permit 10
+ set local-preference 10
+
+router bgp 2
+ bgp router-id 2.2.2.2
+ neighbor 1.1.1.1 remote-as 1
+ neighbor 1.1.1.1 advertisement-interval 30
+ neighbor 1.1.1.1 route-map 2pref3_1 in
+ neighbor 3.3.3.3 remote-as 3
+ neighbor 3.3.3.3 advertisement-interval 30
+ neighbor 3.3.3.3 route-map 2pref3_3 in
+ neighbor 4.4.4.4 remote-as 4
+ neighbor 4.4.4.4 advertisement-interval 30
+ neighbor 4.4.4.4 route-map 2pref3_4 in
+
+route-map 2pref3_1 permit 10
+ set local-preference 10
+
+route-map 2pref3_3 permit 10
+ set local-preference 100
+
+route-map 2pref3_4 permit 10
+ set local-preference 10
+
+router bgp 3
+ bgp router-id 3.3.3.3
+ neighbor 1.1.1.1 remote-as 1
+ neighbor 1.1.1.1 advertisement-interval 30
+ neighbor 1.1.1.1 route-map 3pref1_1 in
+ neighbor 2.2.2.2 remote-as 2
+ neighbor 2.2.2.2 advertisement-interval 30
+ neighbor 2.2.2.2 route-map 3pref1_2 in
+ neighbor 4.4.4.4 remote-as 4
+ neighbor 4.4.4.4 advertisement-interval 30
+ neighbor 4.4.4.4 route-map 3pref1_4 in
+
+route-map 3pref1_1 permit 10
+ set local-preference 100
+
+route-map 3pref1_2 permit 10
+ set local-preference 10
+
+route-map 3pref1_4 permit 10
+ set local-preference 10
+
+router bgp 4
+ bgp router-id 4.4.4.4
+ neighbor 1.1.1.1 remote-as 1
+ neighbor 1.1.1.1 advertisement-interval 30
+ neighbor 2.2.2.2 remote-as 2
+ neighbor 2.2.2.2 advertisement-interval 30
+ neighbor 3.3.3.3 remote-as 3
+ neighbor 3.3.3.3 advertisement-interval 30
+
+event announce-prefix 4.4.4.4 4:5::589  2.0
+event terminate 10000
+
+debug show-receive-events
+debug show-final-ribs
