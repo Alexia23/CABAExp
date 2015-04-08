@@ -18,7 +18,8 @@ def downloadfile(filepath):
     ftp = ftpconnect('archive.routeviews.org')    
     #print ftp.getwelcome() #显示ftp服务器欢迎信息
     bufsize = 1024 #设置缓冲块大小      
-    fp = open(filepath.split('/')[1] + '- ' + filepath.split('/')[-1] ,'w'); #以写模式在本地打开文件
+    fp = open('/home/wq/Work/simbgp/data/' + filepath.split('/')[1] + '- ' + filepath.split('/')[-1] ,'w'); #以写模式在本地打开文件
+    #print '/home/wq/Work/simbgp/data/' + filepath.split('/')[1] + '- ' + filepath.split('/')[-1];
     ftp.retrbinary('RETR ' + filepath, fp.write, bufsize) #接收服务器上文件并写入本地文件
     ftp.set_debuglevel(0) #关闭调试
     fp.close()
@@ -28,7 +29,7 @@ def getDownloadPath(date, time): #downloadfile("/route-views.eqix/bgpdata/2015.0
     ftp = ftpconnect('archive.routeviews.org')
     for dirName in ftp.nlst()[11:-7]:
         path = '/' + dirName + '/bgpdata/' + date + '/RIBS/' + 'rib.'+time+'.bz2';
-        print path
-        #downloadfile(path)
+        #print path
+        downloadfile(path)
 
 getDownloadPath('2015.04', '20150403.0000')
