@@ -33,29 +33,28 @@ def prefixInfoListToStr(prefixInfos):
 
 
 
-
-
-f  = open('output', 'r');
-fw = open('fib','w');
-line = f.readline();
-lastIPPrefix = '';
-onePrefixInfo = [];
-strTemp=""
-while line != '':
-	infos = line.split('|');
-	if len(infos) <= 5:
-		line = f.readline();
-		continue;
-	if lastIPPrefix != infos[5]:
-		writeinfos = handleOneRouteInfo(onePrefixInfo);
-		fw.write(prefixInfoListToStr(writeinfos));
-		onePrefixInfo = [];
-		lastIPPrefix = infos[5];
-		onePrefixInfo.append(infos);
-	else:
-		onePrefixInfo.append(infos);
+def  reduceFIB(inputFile, outFile):
+	f  = open(inputFile, 'r');
+	fw = open(outFile,'w');
 	line = f.readline();
-print handleOneRouteInfo(onePrefixInfo);
-fw.write(prefixInfoListToStr(writeinfos));
-fw.close();
-f.close();
+	lastIPPrefix = '';
+	onePrefixInfo = [];
+	strTemp=""
+	while line != '':
+		infos = line.split('|');
+		if len(infos) <= 5:
+			line = f.readline();
+			continue;
+		if lastIPPrefix != infos[5]:
+			writeinfos = handleOneRouteInfo(onePrefixInfo);
+			fw.write(prefixInfoListToStr(writeinfos));
+			onePrefixInfo = [];
+			lastIPPrefix = infos[5];
+			onePrefixInfo.append(infos);
+		else:
+			onePrefixInfo.append(infos);
+		line = f.readline();
+	writeinfos = handleOneRouteInfo(onePrefixInfo);
+	fw.write(prefixInfoListToStr(writeinfos));
+	fw.close();
+	f.close();
