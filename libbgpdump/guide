@@ -1,3 +1,5 @@
 https://github.com/woodrow/cidr-report_analysis
 运行方法:./configure   make ...
-
+download in work/code dir
+need intall:
+sudo apt-get install libbz2-dev
