@@ -1,4 +1,5 @@
 #https://docs.python.org/3/tutorial/inputoutput.html#methods-of-file-objects
+#FIB
 def  handleOneRouteInfo(onePrefixInfo):
 	if len(onePrefixInfo) <= 0:
 		return '';
