@@ -45,6 +45,37 @@ class RouteInfo:
 
 
 
+def getAsToAddrs(inputfile, outputfile):
+	f = open(inputfile, 'r')
+	fw = open(outputfile, 'w')
+	line = f.readline()
+	as2Addr = {}
+	while line:
+		params = line.split('|')
+		line = f.readline()
+		if len(params) < 8:
+			continue
+		asNums = params[6].split(' ')
+		if asNums < 1:
+			continue
+		if asNums[-1][0] == '{':
+			asNums[-1] = asNums[-1][1:-1]
+			temp = asNums[-1].split(',')
+			if  len(temp) != 1:
+				continue
+		if asNums[-1] in as2Addr.keys():
+			if params[5] in as2Addr[asNums[-1]]:
+				continue
+			else:
+				as2Addr[asNums[-1]].append(params[5])
+		else:
+			as2Addr[asNums[-1]] = []
+			as2Addr[asNums[-1]].append(params[5])
+	for i in as2Addr.keys():
+		fw.write(i+'|')
+		for j in as2Addr[i]:
+			fw.write(j + '|')
+		fw.write('\n')
 
 #return list{fibnum, ipv6fibnum}
 def  reduceIpv6Fib(inputfile, outputfile, percentage):
@@ -69,7 +100,7 @@ def  reduceIpv6Fib(inputfile, outputfile, percentage):
 		if asNums[-1][0] == '{':
 			asNums[-1] = asNums[-1][1:-1]
 			temp = asNums[-1].split(',')
-			if temp > 1:
+			if len(temp) > 1:
 				useSamples.remove(useSample)
 				continue
 		route = RouteInfo(params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], asNums[-1]);
