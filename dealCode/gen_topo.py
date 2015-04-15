@@ -115,40 +115,28 @@ def strRelations(relations, edge):
 def writeExportConfig(node, clients, providers, peers):
     peernum = len(peers) + len(providers)
     clientnum = len(clients)
-    if peernum <= clientnum or clientnum == 0:
-        deny = ""
-        print "route-map 2pref%d_%s deny 10" %(node, "filters")
-        for edge in peers:
-            if edge[0]==node:
-                deny = deny + "|^" + str(edge[1])
-            else:
-                deny = deny + "|" + str(edge[0])+"_"+str(edge[1])
-        for edge in providers:
-            if edge[0]==node:
-                deny = deny + "|^" + str(edge[1])
-            else:
-                deny = deny + "|" + str(edge[0])+"_"+str(edge[1])
-        print " match as-path %s" %(deny[1:])
-        # for edge in peers:
-        #     print " match as-path %d" %(edge[1])
-        # for edge in providers:
-        #     print " match as-path %d" %(edge[1])
-    else:
-        if clientnum == 0:
-            print "route-map 2pref%d_%s deny 10" %(node, "filters")
+    deny = ""
+    print "route-map 2pref%d_%s deny 10" %(node, "filters")
+    for edge in peers:
+        if edge[0]==node:
+            deny = deny + "|^" + str(edge[1])
         else:
-            print "route-map 2pref%d_%s permit 10" %(node, "filters")
-            permit = ""
-            for edge in clients:
-                if edge[0]==node:
-                    permit = permit + "|^" +str(edge[1])
-                else:
-                    permit = permit + "|" + str(edge[0]) + "_" + str(edge[1])
-            print " match as-path %s"%(permit[1:]) 
+            deny = deny + "|" + str(edge[0])+"_"+str(edge[1])
+    for edge in providers:
+        if edge[0]==node:
+            deny = deny + "|^" + str(edge[1])
+        else:
+            deny = deny + "|" + str(edge[0])+"_"+str(edge[1])
+    print " match as-path %s" %(deny[1:])
+    # for edge in peers:
+    #     print " match as-path %d" %(edge[1])
+    # for edge in providers:
+    #     print " match as-path %d" %(edge[1])
+    
     print ""
 
 def writeImportConfig():
-    tmplist = [("peers",10),("clients",10),("providers",10),("siblings", 10)]
+    tmplist = [("peers",50),("clients",100),("providers",10),("siblings", 50)]
     for v in tmplist:
         print "route-map 1pref_%s permit %s" %(v[0], v[1])
         print " set local-preference %d" %(v[1])

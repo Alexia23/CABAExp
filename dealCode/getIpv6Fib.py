@@ -5,7 +5,7 @@
 #TABLE_DUMP_V2|03/31/15 02:00:00|A|206.126.236.37|6939|1.0.224.0/19|6939 38040 9737|IGP
 import random
 class RouteInfo:
-	def __init__(self, routeName, time, type, addr, asn, prefix, asPath, protocol):
+	def __init__(self, routeName, time, type, addr, asn, prefix, asPath, protocol, sourceAs):
 		self.routeName = routeName;
 		self.time = time;
 		self.type = type;
@@ -14,6 +14,7 @@ class RouteInfo:
 		self.prefix = prefix;
 		self.asPath = asPath;
 		self.protocol = protocol;
+		self.sourceAs = sourceAs;
 	def printRouteInfo(self):
 		print self.asn;
 		print self.asPath;
@@ -31,7 +32,7 @@ class RouteInfo:
 		else:
 			return;
 	def aS2Ipv6Addr(self):
-		ipv6Str = str(hex(int(self.asn)))
+		ipv6Str = str(hex(int(self.sourceAs)))
 		res = ''
 		for i in range(10-len(ipv6Str)):
 			res+='0'
@@ -61,12 +62,22 @@ def  reduceIpv6Fib(inputfile, outputfile, percentage):
 		if len(params) < 8:
 			useSamples.remove(useSample)
 			continue
-		route = RouteInfo(params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7]);
-		if route.asn in results:
-			routeRecord = results[route.asn];
+		asNums = params[6].split(' ')
+		if asNums < 1:
+			useSamples.remove(useSample)
+			continue
+		if asNums[-1][0] == '{':
+			asNums[-1] = asNums[-1][1:-1]
+			temp = asNums[-1].split(',')
+			if temp > 1:
+				useSamples.remove(useSample)
+				continue
+		route = RouteInfo(params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], asNums[-1]);
+		if route.sourceAs in results:
+			routeRecord = results[route.sourceAs];
 			routeRecord.modifyRouteInfo(route);
 		else:
-			results[route.asn] = route;
+			results[route.sourceAs] = route;
 		#route.printRouteInfo();
 	for value in results.values():
 		value.aS2Ipv6Addr();
