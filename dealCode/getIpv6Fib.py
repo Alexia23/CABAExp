@@ -3,6 +3,7 @@
 #Program: change ipv4 fib  to ipv6 fib for CABA   
 
 #TABLE_DUMP_V2|03/31/15 02:00:00|A|206.126.236.37|6939|1.0.224.0/19|6939 38040 9737|IGP
+import random
 class RouteInfo:
 	def __init__(self, routeName, time, type, addr, asn, prefix, asPath, protocol):
 		self.routeName = routeName;
@@ -42,22 +43,34 @@ class RouteInfo:
 
 
 
-f  = open('fib', 'r');
-fw = open('ipv6Fib','w');
-line = f.readline();
-results= {};
-while line:
-	params = line.split('|');
+
+
+#return list{fibnum, ipv6fibnum}
+def  reduceIpv6Fib(inputfile, outputfile, percentage):
+	f  = open(inputfile, 'r');
+	fw = open(outputfile,'w');
 	line = f.readline();
-	route = RouteInfo(params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7]);
-	if route.asn in results:
-		routeRecord = results[route.asn];
-		routeRecord.modifyRouteInfo(route);
-	else:
-		results[route.asn] = route;
-	#route.printRouteInfo();
-for value in results.values():
-	value.aS2Ipv6Addr();
-	fw.write(value.RouteInfoToStr());
-fw.close();
-f.close();
+	samples=[];
+	while line:
+		samples.append(line)
+		line = f.readline()
+	useSamples = random.sample(samples, int(len(samples)*percentage))
+	results= {};
+	for useSample in useSamples:
+		params = useSample.split('|');
+		if len(params) < 8:
+			useSamples.remove(useSample)
+			continue
+		route = RouteInfo(params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7]);
+		if route.asn in results:
+			routeRecord = results[route.asn];
+			routeRecord.modifyRouteInfo(route);
+		else:
+			results[route.asn] = route;
+		#route.printRouteInfo();
+	for value in results.values():
+		value.aS2Ipv6Addr();
+		fw.write(value.RouteInfoToStr());
+	fw.close();
+	f.close();
+	return len(useSamples), len(results)
