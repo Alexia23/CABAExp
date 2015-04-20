@@ -1485,7 +1485,13 @@ _systime = 0;
 while len(_event_Scheduler) > 0:
 	cur_event = _event_Scheduler.pop(0);
 	_systime = cur_event.time;
-	if cur_event.process() == -1:
+	if cur_event.type == EVENT_UPDATE:
+		print formatTime(cur_event.time);
+		res = cur_event.process();
+		print formatTime(cur_event.time)；
+	else:
+		res = cur_event.process();
+	if res == -1:
 		break;
 
 if CHECK_LOOP:
