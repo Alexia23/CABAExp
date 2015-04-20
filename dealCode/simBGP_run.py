@@ -1488,7 +1488,7 @@ while len(_event_Scheduler) > 0:
 	if cur_event.type == EVENT_UPDATE:
 		print formatTime(cur_event.time);
 		res = cur_event.process();
-		print formatTime(cur_event.time)；
+		print formatTime(cur_event.time);
 	else:
 		res = cur_event.process();
 	if res == -1:
