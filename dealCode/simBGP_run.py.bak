@@ -1482,17 +1482,10 @@ readConfig(sys.argv[1]);
 
 _systime = 0;
 
-if len(_event_Scheduler) > 0:
-	cur_event = _event_Scheduler.pop(0);
-	_systime = cur_event.time;
-	print formatTime(_systime);
-	cur_event.process();
-
 while len(_event_Scheduler) > 0:
 	cur_event = _event_Scheduler.pop(0);
 	_systime = cur_event.time;
 	if cur_event.process() == -1:
-		print formatTime(cur_event.time);
 		break;
 
 if CHECK_LOOP:
