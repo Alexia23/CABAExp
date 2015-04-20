@@ -68,7 +68,7 @@ LINK_UP   = 0;
 
 _seq_seed = 0;
 _systime = 0; # in microsecond
-
+updatetimes = 0;
 def formatTime(tm):
 	return str(int(tm/10000)*1.0/100);
 
@@ -438,7 +438,8 @@ class CRouter:
 					self.sendto(pid, p);
 
 	def update(self, prefix):
-		global SHOW_UPDATE_RIBS, CHECK_LOOP, SHOW_DEBUG, GHOST_FLUSHING, GHOST_BUSTER;
+		global SHOW_UPDATE_RIBS, CHECK_LOOP, SHOW_DEBUG, GHOST_FLUSHING, GHOST_BUSTER,updatetimes;
+		updatetimes += 1;
 		[change, trend] = self.pathSelection(prefix);
 		if SHOW_UPDATE_RIBS:
 			self.showRib(prefix);
@@ -1481,19 +1482,15 @@ if len(sys.argv) < 2:
 readConfig(sys.argv[1]);
 
 _systime = 0;
-
-if len(_event_Scheduler) > 0:
-	cur_event = _event_Scheduler.pop(0);
-	_systime = cur_event.time;
-	print formatTime(_systime);
-	cur_event.process();
-
+_lastEventTime = 0;
 while len(_event_Scheduler) > 0:
 	cur_event = _event_Scheduler.pop(0);
 	_systime = cur_event.time;
 	if cur_event.process() == -1:
-		print formatTime(cur_event.time);
+		print formatTime(_lastEventTime);
+		print formatTime(_systime);
 		break;
+	_lastEventTime = cur_event.time;
 
 if CHECK_LOOP:
 	nodes = _infect_nodes.keys();
@@ -1504,3 +1501,4 @@ if SHOW_FINAL_RIBS:
 	print "-----======$$$$$$$$ FINISH $$$$$$$$$=======------"
 	for rt in _router_list.values():
 		rt.showAllRib();
+print updatetimes;
