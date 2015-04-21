@@ -43,7 +43,11 @@ def asn2Ipv6Prefix(asn):
 reduceIpv6FIBs( "/home/wq/Work/simbgp/data/FIBData/20150403.0000/", "/home/wq/Work/simbgp/data/Ipv6FIBData/","20150403.0000.0.4", 0.4)
 reduceIpv6FIBs( "/home/wq/Work/simbgp/data/FIBData/20150403.0000/", "/home/wq/Work/simbgp/data/Ipv6FIBData/","20150403.0000.0.6", 0.6)
 reduceIpv6FIBs( "/home/wq/Work/simbgp/data/FIBData/20150403.0000/", "/home/wq/Work/simbgp/data/Ipv6FIBData/","20150403.0000.0.8", 0.8)
-reduceIpv6FIBs( "/home/wq/Work/simbgp/data/FIBData/20150403.0000/", "/home/wq/Work/simbgp/data/Ipv6FIBData/","20150403.0000.1.0", 1)
-getAsToAddrs("/home/wq/Work/simbgp/data/FIBData/20150403.0000/route-views.saopaulo-rib.20150403.0000.out.fib", "/home/wq/Work/simbgp/data/asrel/as2addrs.txt")'''
-print asn2Ipv6Prefix(19391)
+reduceIpv6FIBs( "/home/wq/Work/simbgp/data/FIBData/20150403.0000/", "/home/wq/Work/simbgp/data/Ipv6FIBData/","20150403.0000.1.0", 1)'''
+
+'''
+getAsToAddrs("/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/route-views.saopaulo-rib.20150403.0000.out.fib",
+ "/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.txt")'''
+
+produceAsn("/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.txt", 10, "/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.out");
 

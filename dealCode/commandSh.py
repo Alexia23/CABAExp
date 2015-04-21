@@ -30,3 +30,29 @@ def libDumpRunCommand(sourceDirPath, destPath, destDir):
 #decompressionFiles('/home/wq/Work/simbgp/data/decompressionData/20150403.0000/')
 libDumpRunCommand("/home/wq/Work/simbgp/data/decompressionData/20150403.0000/", 
 	"/home/wq/Work/simbgp/data/vistualData/", "20150403.0000");
+
+
+def produceConfig(filename, asPrefixInfo):
+	f = open(filename, 'r');
+	paras = asPrefixInfo.split("|");
+	outfilename = filename + str(paras[1]);
+	fw = open(outfilename, "w");
+	line = f.readline();
+	while line:
+		fw.write(line);
+		if line == "router bgp " + paras[0] + "\n":
+			line = f.readline();
+			
+			fw.write(line);
+
+		line = f.readline();
+	for i in range(0, paras[1]):
+		outfilename = filename + str(i);
+		fw = open(outfilename, 'w');
+		line = f.readline();
+		while line:
+			fw.write(line);
+			line = f.readline();
+		fwrite("event announce-prefix 1.9.3.91 0000:0x4b:bf00:: 2.0\n")
+		fwrite("event terminate 40000.0")
+
