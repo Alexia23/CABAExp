@@ -5,6 +5,7 @@
 import os
 from parser import *
 from getIpv6Fib import *
+from commandSh import *
 
 def reduceFIBs(sourcePath, destPath, destDir):
 	filelist = os.listdir(sourcePath)
@@ -31,23 +32,29 @@ def reduceIpv6FIBs(sourcePath, destPath, destDir, percentage):
 	fw.close()
 print "main.py"
 
-def asn2Ipv6Prefix(asn):
-	ipv6Str = str(hex(int(asn)))
-	res = ''
-	for i in range(10-len(ipv6Str)):
-		res+='0'
-	res+=ipv6Str;
-	res+="00"
-	return  res[0:4] + ':' + res[4:8]+':'+res[8:12]+"::"
-'''reduceIpv6FIBs( "/home/wq/Work/simbgp/data/FIBData/20150403.0000/", "/home/wq/Work/simbgp/data/Ipv6FIBData/","20150403.0000.0.2", 0.2)
-reduceIpv6FIBs( "/home/wq/Work/simbgp/data/FIBData/20150403.0000/", "/home/wq/Work/simbgp/data/Ipv6FIBData/","20150403.0000.0.4", 0.4)
-reduceIpv6FIBs( "/home/wq/Work/simbgp/data/FIBData/20150403.0000/", "/home/wq/Work/simbgp/data/Ipv6FIBData/","20150403.0000.0.6", 0.6)
-reduceIpv6FIBs( "/home/wq/Work/simbgp/data/FIBData/20150403.0000/", "/home/wq/Work/simbgp/data/Ipv6FIBData/","20150403.0000.0.8", 0.8)
-reduceIpv6FIBs( "/home/wq/Work/simbgp/data/FIBData/20150403.0000/", "/home/wq/Work/simbgp/data/Ipv6FIBData/","20150403.0000.1.0", 1)'''
+reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150422/","20150403.0000.0.2", 0.2)
+'''reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150422/","20150403.0000.0.4", 0.4)
+reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150422/","20150403.0000.0.6", 0.6)
+reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150422/","20150403.0000.0.8", 0.8)
+reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150422/","20150403.0000.1.0", 1)
 
-'''
+
 getAsToAddrs("/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/route-views.saopaulo-rib.20150403.0000.out.fib",
- "/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.txt")'''
+ "/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.txt")
 
 produceAsn("/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.txt", 10, "/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.out");
 
+produceConfig("/home/cnpt/wqfile/CABAsimBgp/tempdata/config.txt", "28624|38|187.110.64.0/19|187.110.64.0/20|187.110.64.0/21|187.110.72.0/21|187.110.80.0/20|187.110.80.0/21|187.110.88.0/21|187.110.96.0/19|187.110.96.0/20|187.110.96.0/21|187.110.104.0/21|187.110.112.0/20|200.237.128.0/19|200.237.128.0/20|200.237.128.0/21|200.237.128.0/24|200.237.129.0/24|200.237.136.0/21|200.237.144.0/20|200.237.144.0/21|200.237.145.0/24|200.237.152.0/21|201.33.32.0/19|201.33.32.0/20|201.33.32.0/21|201.33.40.0/21|201.33.48.0/20|201.33.48.0/21|201.33.56.0/21|201.33.56.0/23|201.54.160.0/20|201.54.160.0/21|201.54.160.0/22|201.54.164.0/22|201.54.168.0/21|201.54.168.0/22|201.54.172.0/22|2804:3bc::/32|");
+
+
+simBgpCommand("/home/cnpt/wqfile/CABAsimBgp/dealCode/simBGP_run.py","/home/cnpt/wqfile/CABAsimBgp/tempdata/config.txt",
+ "/home/cnpt/wqfile/CABAsimBgp/tempdata/simBgpCommand.sh", 39);
+'''
+
+
+'''
+produceAsn("/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.txt", 20, "/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.out");
+
+produceConfig("/home/cnpt/wqfile/CABAsimBgp/tempdata/temp2/config.txt","/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.out");
+simBgpCommand("/home/cnpt/wqfile/CABAsimBgp/dealCode/simBGP_run.py","/home/cnpt/wqfile/CABAsimBgp/tempdata/temp2/config.txt",
+ "/home/cnpt/wqfile/CABAsimBgp/tempdata/simBgpCommand.sh", 20);'''

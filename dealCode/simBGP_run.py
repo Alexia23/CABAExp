@@ -1480,15 +1480,16 @@ if len(sys.argv) < 2:
 
 
 readConfig(sys.argv[1]);
-
+fw = open(sys.argv[1]+'.out', "w");
 _systime = 0;
 _lastEventTime = 0;
 while len(_event_Scheduler) > 0:
 	cur_event = _event_Scheduler.pop(0);
 	_systime = cur_event.time;
 	if cur_event.process() == -1:
-		print formatTime(_lastEventTime);
-		print formatTime(_systime);
+		fw.write(formatTime(_lastEventTime) + "\n");
+		fw.write(str(updatetimes));
+		fw.close();
 		break;
 	_lastEventTime = cur_event.time;
 
@@ -1501,4 +1502,3 @@ if SHOW_FINAL_RIBS:
 	print "-----======$$$$$$$$ FINISH $$$$$$$$$=======------"
 	for rt in _router_list.values():
 		rt.showAllRib();
-print updatetimes;

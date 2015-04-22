@@ -98,16 +98,16 @@ def produceAsn(filename, num, outputfile):
 	asPrefixNum = [];
 	asPrefixNum = sorted(asPrefixDistribution.keys());
 	resAs = [];
-	fw.write("minPrefixNum: " + str(asPrefixNum[0]) + " maxPrefixNum: " + str(asPrefixNum[-1]) + "   num: " +str(num) + "\n");
+	#fw.write("minPrefixNum: " + str(asPrefixNum[0]) + " maxPrefixNum: " + str(asPrefixNum[-1]) + "   num: " +str(num) + "\n");
 	for i in range(0, num):
 		left = len(asPrefixNum)/num*i;
 		right = len(asPrefixNum)/num*(i+1);
 		randomvalue = random.randint(left, right);
 		randomasn = random.sample(asPrefixDistribution[asPrefixNum[randomvalue]], 1);
-		fw.write(str(randomasn[0]) + "  " + asPrefixs[randomasn[0]].split('|')[1] + "\n");
+		fw.write(str(randomasn[0]) + " " + asPrefixs[randomasn[0]].split('|')[1] + "\n");
 		resAs.append(asPrefixs[randomasn[0]]);
-	for i in resAs:
-		fw.write(i);
+	'''for i in resAs:
+		fw.write(i);'''
 
 
 	'''minNum = asnMark[paras[0]];
@@ -132,6 +132,67 @@ def produceAsn(filename, num, outputfile):
 
 #return list{fibnum, ipv6fibnum}
 def  reduceIpv6Fib(inputfile, outputfile, percentage):
+	f  = open(inputfile, 'r');
+	fw = open(outputfile,'w');
+	line = f.readline();
+	samplesAS=[];
+	while line:
+		params = line.split('|');
+		if len(params) < 8:
+			continue;
+		asNums = params[6].split(' ');
+		if asNums < 1:
+			continue;
+		if asNums[-1][0] == '{':
+			asNums[-1] = asNums[-1][1:-1];
+			temp = asNums[-1].split(',');
+			if len(temp) > 1:
+				continue;
+		if asNums[-1] not in samplesAS: 
+			samplesAS.append(asNums[-1]);
+		line = f.readline();
+
+	useSamplesAS = random.sample(samplesAS, int(len(samplesAS)*percentage))
+	f.close();
+
+	f  = open(inputfile, 'r');
+	line = f.readline();
+	results= {};
+	index = 0;
+	index1 = 0;
+	while line:
+		params = line.split('|');
+		if len(params) < 8:
+			continue;
+		asNums = params[6].split(' ');
+		if asNums < 1:
+			continue;
+		if asNums[-1][0] == '{':
+			asNums[-1] = asNums[-1][1:-1];
+			temp = asNums[-1].split(',');
+			if len(temp) > 1:
+				continue;
+		index1 += 1;
+		route = RouteInfo(params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], asNums[-1]);
+		if asNums[-1] not in useSamplesAS: 
+			index+= 1;
+			fw.write(line);
+		else:
+			if route.sourceAs in results.keys():
+				routeRecord = results[route.sourceAs];
+				routeRecord.modifyRouteInfo(route);
+			else:
+				results[route.sourceAs] = route;
+		#route.printRouteInfo();
+		line = f.readline();
+	for value in results.values():
+		value.aS2Ipv6Addr();
+		fw.write(value.RouteInfoToStr());
+	fw.close();
+	f.close();
+	return index1, len(results)+index
+
+	'''
 	f  = open(inputfile, 'r');
 	fw = open(outputfile,'w');
 	line = f.readline();
@@ -168,4 +229,4 @@ def  reduceIpv6Fib(inputfile, outputfile, percentage):
 		fw.write(value.RouteInfoToStr());
 	fw.close();
 	f.close();
-	return len(useSamples), len(results)
+	return len(useSamples), len(results)'''
