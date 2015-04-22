@@ -17,7 +17,7 @@ def reduceFIBs(sourcePath, destPath, destDir):
 	for i in filelist:
 		reduceFIB(sourcePath+i, destPath+destDir+'/'+i+'.fib')
 
-def reduceIpv6FIBs(sourcePath, destPath, destDir, percentage):
+def reduceIpv6FIBs(sourcePath, destPath, destDir, asns):
 	filelist = os.listdir(sourcePath)
 	if os.path.exists(destPath+destDir+'/'):
 		os.popen('rm -rf  ' + destPath+destDir+'/')
@@ -27,18 +27,33 @@ def reduceIpv6FIBs(sourcePath, destPath, destDir, percentage):
 	filelist = os.listdir(sourcePath)
 	fw = open(destPath+destDir+'/res.txt', 'w')
 	for i in filelist:
-		res = reduceIpv6Fib(sourcePath+i, destPath+destDir+'/'+i+'.ipv6fib', percentage)
-		fw.write(sourcePath+i +"            " + str(res[0]) + "           " + str(res[1]) + "           percentage: " + str(res[1]*1.0/res[0]) + "\n")
+		res = reduceIpv6Fib(sourcePath+i, destPath+destDir+'/'+i+'.ipv6fib', asns)
+		fw.write(sourcePath+i +"   " + str(res[0]) + "    " + str(res[1]) + "   percentage: " + str(1.0-res[1]*1.0/res[0]) + "\n")
 	fw.close()
-print "main.py"
-
-reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150422/","20150403.0000.0.2", 0.2)
-'''reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150422/","20150403.0000.0.4", 0.4)
-reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150422/","20150403.0000.0.6", 0.6)
-reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150422/","20150403.0000.0.8", 0.8)
-reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150422/","20150403.0000.1.0", 1)
 
 
+def randomAsn(filename, percentage):
+	f = open(filename, 'r');
+	lines = f.readlines();
+	asNums = [];
+	for line in lines:
+		params = line.split("|");
+		asNums.append(params[0]);
+	return random.sample(asNums, int(len(asNums)*percentage))
+
+
+asns = randomAsn("/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.txt", 0.2)
+reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150422/","20150403.0000.0.2", asns)
+asns = randomAsn("/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.txt", 0.4)
+reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150422/","20150403.0000.0.4", asns)
+asns = randomAsn("/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.txt", 0.6)
+reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150422/","20150403.0000.0.6", asns)
+asns = randomAsn("/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.txt", 0.8)
+reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150422/","20150403.0000.0.8", asns)
+asns = randomAsn("/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.txt", 1.0)
+reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150422/","20150403.0000.1.0", asns)
+
+'''
 getAsToAddrs("/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/route-views.saopaulo-rib.20150403.0000.out.fib",
  "/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.txt")
 
@@ -49,10 +64,7 @@ produceConfig("/home/cnpt/wqfile/CABAsimBgp/tempdata/config.txt", "28624|38|187.
 
 simBgpCommand("/home/cnpt/wqfile/CABAsimBgp/dealCode/simBGP_run.py","/home/cnpt/wqfile/CABAsimBgp/tempdata/config.txt",
  "/home/cnpt/wqfile/CABAsimBgp/tempdata/simBgpCommand.sh", 39);
-'''
 
-
-'''
 produceAsn("/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.txt", 20, "/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.out");
 
 produceConfig("/home/cnpt/wqfile/CABAsimBgp/tempdata/temp2/config.txt","/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.out");

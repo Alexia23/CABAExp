@@ -131,36 +131,14 @@ def produceAsn(filename, num, outputfile):
 	return res;'''
 
 #return list{fibnum, ipv6fibnum}
-def  reduceIpv6Fib(inputfile, outputfile, percentage):
+def  reduceIpv6Fib(inputfile, outputfile, asns):
 	f  = open(inputfile, 'r');
-	fw = open(outputfile,'w');
-	line = f.readline();
-	samplesAS=[];
-	while line:
-		params = line.split('|');
-		if len(params) < 8:
-			continue;
-		asNums = params[6].split(' ');
-		if asNums < 1:
-			continue;
-		if asNums[-1][0] == '{':
-			asNums[-1] = asNums[-1][1:-1];
-			temp = asNums[-1].split(',');
-			if len(temp) > 1:
-				continue;
-		if asNums[-1] not in samplesAS: 
-			samplesAS.append(asNums[-1]);
-		line = f.readline();
-
-	useSamplesAS = random.sample(samplesAS, int(len(samplesAS)*percentage))
-	f.close();
-
-	f  = open(inputfile, 'r');
-	line = f.readline();
+	fw = open(outputfile, "w");
+	lines = f.readlines();
 	results= {};
 	index = 0;
 	index1 = 0;
-	while line:
+	for line in lines:
 		params = line.split('|');
 		if len(params) < 8:
 			continue;
@@ -174,7 +152,7 @@ def  reduceIpv6Fib(inputfile, outputfile, percentage):
 				continue;
 		index1 += 1;
 		route = RouteInfo(params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], asNums[-1]);
-		if asNums[-1] not in useSamplesAS: 
+		if asNums[-1] not in asns: 
 			index+= 1;
 			fw.write(line);
 		else:
@@ -183,50 +161,9 @@ def  reduceIpv6Fib(inputfile, outputfile, percentage):
 				routeRecord.modifyRouteInfo(route);
 			else:
 				results[route.sourceAs] = route;
-		#route.printRouteInfo();
-		line = f.readline();
 	for value in results.values():
 		value.aS2Ipv6Addr();
 		fw.write(value.RouteInfoToStr());
 	fw.close();
 	f.close();
 	return index1, len(results)+index
-
-	'''
-	f  = open(inputfile, 'r');
-	fw = open(outputfile,'w');
-	line = f.readline();
-	samples=[];
-	while line:
-		samples.append(line)
-		line = f.readline()
-	useSamples = random.sample(samples, int(len(samples)*percentage))
-	results= {};
-	for useSample in useSamples:
-		params = useSample.split('|');
-		if len(params) < 8:
-			useSamples.remove(useSample)
-			continue
-		asNums = params[6].split(' ')
-		if asNums < 1:
-			useSamples.remove(useSample)
-			continue
-		if asNums[-1][0] == '{':
-			asNums[-1] = asNums[-1][1:-1]
-			temp = asNums[-1].split(',')
-			if len(temp) > 1:
-				useSamples.remove(useSample)
-				continue
-		route = RouteInfo(params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], asNums[-1]);
-		if route.sourceAs in results:
-			routeRecord = results[route.sourceAs];
-			routeRecord.modifyRouteInfo(route);
-		else:
-			results[route.sourceAs] = route;
-		#route.printRouteInfo();
-	for value in results.values():
-		value.aS2Ipv6Addr();
-		fw.write(value.RouteInfoToStr());
-	fw.close();
-	f.close();
-	return len(useSamples), len(results)'''
