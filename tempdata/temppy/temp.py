@@ -1,6 +1,7 @@
 #coding=utf-8
 import pylab as plt
 import numpy as np
+import math
 def getASNum(filename):
 	f = open(filename, 'r');
 	t1 = [];
@@ -8,14 +9,17 @@ def getASNum(filename):
 	t3 = [];
 	lines = f.readlines();
 	index = 0;
+	sum = 0;
 	for line in lines:
 		paras = line.split("|");
 		index+=1;
 		t1.append(index);
 		t2.append(int(paras[1]));
 		t3.append(int(paras[0]));
+		sum += int(paras[1])
+	print sum
 
-	plt.plot(t1,t2,'o');
+	'''plt.plot(t1,t2,'o');
 	plt.title('Prefix Distribution For AS Quantity');
 	plt.xlabel("Increasing As Quantity");
 	plt.ylabel("Prefix Number");
@@ -26,8 +30,30 @@ def getASNum(filename):
 	plt.xlabel("ASN");
 	plt.ylabel("Prefix Number");
 	plt.savefig("4.jpg");
-	
+	'''
+	newt2 = sorted(t2);'''
+	print newt2;
+	newt3 = [];
+	for i in newt2:
+		newt3.append(math.log10(i));
+	plt.plot(t1,newt3);
+	plt.title('Prefix Distribution For ASN');
+	plt.xlabel("Increasing As Quantity Ordered By Prefix Num");
+	plt.ylabel("log10(Prefix Number)");
+	plt.savefig("7.jpg");'''
 
+	res = [];
+	for i in range(0,len(newt2)):
+		sum = 0;
+		for j in range(0,i):
+			sum += newt2[j];
+		ave = sum/(i+1);
+		res.append(ave);
+	plt.plot(t1,res);
+	plt.title('Prefix Distribution For ASN');
+	plt.xlabel("Increasing As Quantity Ordered By Prefix Num");
+	plt.ylabel("Average Prefix Number");
+	plt.savefig("6.jpg");
 
 
 def paintzhexian():
@@ -55,7 +81,9 @@ def paintzhexian():
 	print values.values();
 	for i in values.keys():
 		plt.plot(x, values[i], color=colors[i]);
-	plt.title("13 Routes Fib Reduction Ratio")
+	plt.title("13 Routes Fib Reduction Ratio");
+	plt.xlabel("The Propertion Of The New Strategy");
+	plt.ylabel("Fib Reduction Ratio");
 	plt.savefig("5.jpg");
 	return tp;
 
@@ -83,8 +111,9 @@ def zhuahungtuBar(info,routename):
 	plt.semilogy(1000);
 
 
-#getASNum("as2addrs.txt")
-tp = paintzhexian();
+
+getASNum("as2addrs.txt")
+'''tp = paintzhexian();
 names = [1,2,3,4,5,6,7,8,9,10,11,12,13]
 
-zhuahungtuBar(tp.values(), names);
+zhuahungtuBar(tp.values(), names);'''

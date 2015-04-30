@@ -42,7 +42,10 @@ def randomAsn(filename, percentage):
 	return random.sample(asNums, int(len(asNums)*percentage))
 
 
-asns = randomAsn("/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.txt", 0.2)
+getAsToAddrs("/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/route-views.saopaulo-rib.20150403.0000.out.fib",
+ "/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.txt")
+
+'''asns = randomAsn("/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.txt", 0.2)
 reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150422/","20150403.0000.0.2", asns)
 asns = randomAsn("/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.txt", 0.4)
 reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150422/","20150403.0000.0.4", asns)
@@ -53,7 +56,7 @@ reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/", "/home/c
 asns = randomAsn("/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.txt", 1.0)
 reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150422/","20150403.0000.1.0", asns)
 
-'''
+
 getAsToAddrs("/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/route-views.saopaulo-rib.20150403.0000.out.fib",
  "/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.txt")
 
