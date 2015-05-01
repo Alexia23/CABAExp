@@ -1,0 +1,6 @@
+修改之处
+1、修改了过滤规则，把permit改成deny
+2、修改了local-preference，customer的local-preference设为了100，peer的设为了50，provider的设为了10.
+用法
+1、gen_topo_wth的文件用法是genTopo.py configfile victimAS attackerAS，输入被攻击和攻击的AS可以直接生成配置文件。
+2、gen_topo_base的用法是genTopo.py configfile，事件另外输入，例如第三个附件，这种用法适合大量事件模拟。

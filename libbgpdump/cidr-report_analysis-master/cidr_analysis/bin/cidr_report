@@ -1,0 +1,41 @@
+#!/usr/bin/env python2.6
+
+import sys
+import os
+import datetime
+import re
+# hack for uninstalled packages
+try:
+    import cidr_analysis
+except ImportError:
+    sys.path.append(os.path.realpath('../../cidr_analysis'))
+finally:
+    from cidr_analysis import aggtree
+    from cidr_analysis import utils
+# /hack
+
+
+def usage():
+    print(' '.join(["USAGE:", sys.argv[0], 'RIB_FILE.normrib']))
+    print("""  Generate CIDR report.""")
+
+
+def main():
+    if len(sys.argv) == 2:
+        normrib_path = os.path.abspath(sys.argv[1])
+        dbfile_path = (
+            normrib_path[:normrib_path.rindex('.normrib')] +  '.cidrreport')
+        rib_date = utils.extract_rib_date(normrib_path)
+        print("Starting processing table.")
+        f = open(normrib_path, 'r')
+        dbf = open(dbfile_path, 'w')
+        aggtree.aggregate_table(f, dbf, rib_date)
+        f.close()
+        dbf.close()
+        print("Ending processing table.")
+    else:
+        usage()
+
+
+if __name__ == '__main__':
+    main()

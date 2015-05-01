@@ -1,0 +1,120 @@
+==Project todo==
+
+* **DONE** Reorganize base layout
+(see http://jcalderone.livejournal.com/39794.html and
+http://stackoverflow.com/questions/193161/what-is-the-best-project-structure-for-a-python-application)
+
+    cidr-report_analysis/
+      cidr_analysis/
+        bin/
+        cidr_analysis/
+          __init__.py
+          test/
+            __init__.py
+      libbgpdump/
+      nov12/
+      oct22/
+      optimization/
+      planning/
+      rib_dumps/
+      routeviews/
+      rv2atoms-0.5/
+
+* **DONE** Refactor cidr\_analysis code into a real module, and separate executable
+actions (into `bin`) from module-like stuff (into `cidr_analysis`)
+
+* **DONE** Refactor aggtree to perform aggregation analysis on one /8 at a time in order
+to use memory more efficiently.
+
+* **DONE** Refactor current cidrprefix\_treeonly code to aggregate each view
+individually, perhaps by keeping a dict keyed by peer ip in which to store
+PrefixAttr objects, and then determining aggregation potential by crawling the
+tree recursively until all nodes are aggregable (it would be useful to
+implement `__eq__` or whatever the appropriate method is in PrefixAttr such
+that `any()` and/or `all()` function in a useful way to make this as efficient
+as possible)
+
+--------------------------------------------------------------------------------
+
+## current quality problems
+
+* Figure out a quick way to fully visualize trees -- visualize per peer -- to
+see why aggregation is or isn't taking place
+
+* Track node aggregability with "virtual nodes", either
+    - by default, or
+    - only once a covering (top/lonely) prefix is laid down
+
+* Handle partial aggregability -- allowing a covering prefix to aggregate all aggregable subprefixes while ignoring/discounting "punch out" prefixes
+    - to this point, why does Geoff Huston not simply "partly aggregate" the
+    more-specific prefixes into the covering less-specific?
+    - debug aggregation of 17_714_rib
+
+* Consider the proper function of the system in the face of unordered (beyond
+the first octet) insertion of prefixes into the tree!
+
+* Is my approach to maintaining aggregable\_more\_specifics at each node the way
+to go? it seems perhaps not, with regard to out of order, partial aggregation,
+etc.
+    - perhaps the solution is to just build the tree and then walk it after?
+    - this is probably the "correct" solution that can then be improved after
+
+## current proposed solution
+
+* Don't perform any determinations of "aggregatability" during tree construction
+
+* Once tree is constructed, walk it to find TOP/LONELY prefixes, and then from
+each of those, recursively (DFS) find the next TOP/LONELY prefix within each
+subtree and compare it's aggregability with its parent
+    - basis case: leaf 'node' (prefix):
+        1. compare aggregability with parent
+        2. classify as LONELY/TOP/DEAGG/DELEG accordingly
+        3. set is_advertised bit accordingly
+        4. return tuple containing (advertised_prefix_list, agg_prefix_list)
+    - non-basis case
+        1. run classifiation function on children
+        2. perform basis case as given above, returning the concatenation of the
+           lists received from children in the returned tuple
+
+-------------------------------------------------------------------------------
+
+* Also, refactor cidrprefix\_treeonly to allow different classification
+algorithms (really, AS\_PATH equality/routing policy equality algorithms) to
+be run, including:
+    - exact path match (current cidr report)
+    - no deviation in upstream routing policy (arthur + my approach)
+    - exact path match with virtual nodes for unadvertised routes
+      (i.e. unadvertised but feasible less-specific covering prefixes)
+
+* Build unit tests for cidr\_analysis module functions and components
+    - Think about functional spec for each and design tests accordingly
+    - Remaining modules:
+        - aggtree
+        - process_rib??
+        - process_txtrib
+
+* Refactor code to perform logging:
+    - using the python logging library
+    - capturing loggable output from command-line calls (i.e. using subprocess)
+    - capturing other loggable error conditions/exceptions/etc.
+    - make sure log output is formatted for easy grepping or other counting
+      to gather summary statistics about the success or failure of a given
+      processing run
+
+* hack up straightenRV to produce output like I'm expecting from the other text-
+based solutions:
+    prefix peer_ip as_path (origin last)
+
+* test and profile (CPU time and memory) processing workflow:
+    - generate txt RIB (simpledump or straightenRV)
+    - (optional) sort on prefix -- not sure how valuable/necessary this is
+    - preprocess RIB and generate statistic files for validation (neighbors.py)
+    - perform cidr-report analysis (cidrprefix_treeonly.py)
+    - dump cidr-report ranking into postgres
+    - (optional) save intermediate data for later recall/checking
+
+* optimize major problems
+
+* preflight processing with bauer/karen/ddc/arthur
+
+* start processing!

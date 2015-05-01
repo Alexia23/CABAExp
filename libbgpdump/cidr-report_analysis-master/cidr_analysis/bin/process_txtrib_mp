@@ -1,0 +1,53 @@
+#!/usr/bin/env python2.6
+
+import sys
+import os
+# hack for uninstalled packages
+try:
+    import cidr_analysis
+except ImportError:
+    sys.path.append(os.path.realpath('../../cidr_analysis'))
+finally:
+    from cidr_analysis import process_txtrib_mp
+# /hack
+
+
+def usage():
+    print("USAGE: {0} [--numprocs N] [--outdir PATH] RIB_FILE.txt ...".format(
+        os.path.basename(sys.argv[0])))
+    print("""  Preprocesses the specified intermediate text-based routing table
+  (.txt) produced by the process_rib tool to normalize AS_PATHs, including
+  removal of AS prepends and loops. The normalized text-based routing table
+  is output with a '.normrib' extension. This tool also produces statistical
+  files containing the number of prefixes seen by each peer (.peers) and the
+  number of prefixes per AS seen by each peer (.ppapp), to allow discovery of
+  any cases of significant deviation amongst the routeviews peers.
+
+  Optional --db argument outputs files appropriate for database ingestion.
+  --numprocs allows the number of parallel processes to be specified.
+  --outdir allows the path to the database file outputs to be specified.""")
+
+
+def main():
+    txtrib_paths = None
+    first_path_index = 1
+    num_switches = 4
+    numprocs = 2
+    outdir = './'
+    if len(sys.argv) > 1:
+        for i in xrange(1,min(len(sys.argv), 1+num_switches)):
+            if sys.argv[i] == '--outdir':
+                outdir = sys.argv[i+1]
+                first_path_index = i+2
+            if sys.argv[i] == '--numprocs':
+                numprocs = int(sys.argv[i+1])
+                first_path_index = i+2
+        txtrib_paths = sys.argv[first_path_index:]
+    if txtrib_paths:
+        process_txtrib_mp.process_txtrib_mp(txtrib_paths,
+            num_processes=numprocs, output_dir=outdir)
+    else:
+        usage()
+
+if __name__ == '__main__':
+    main()

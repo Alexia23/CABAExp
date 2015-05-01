@@ -1,0 +1,7 @@
+*~
+*.[oa]
+Makefile
+config.*
+*testbgpdump
+bgpdump-config.h
+bgpdump.spec
