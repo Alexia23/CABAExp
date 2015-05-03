@@ -56,7 +56,7 @@ def getASNum(filename):
 	plt.savefig("6.jpg");
 
 
-def paintzhexian():
+def paintzhexian(filename,savefilename):
 	colors = 'rgbcmykrgbcmyk'
 	values = {};
 	tp = {};
@@ -64,7 +64,7 @@ def paintzhexian():
 		values[i]=[];
 		tp[i] = [];
 	for i in range(1,6):
-		tfilename = "res"+str(i)+".txt";
+		tfilename = filename + "res"+str(i)+".txt";
 		f = open(tfilename);
 		lines = f.readlines();
 		index = 0;
@@ -84,14 +84,14 @@ def paintzhexian():
 	plt.title("13 Routes Fib Reduction Ratio");
 	plt.xlabel("The Propertion Of The New Strategy");
 	plt.ylabel("Fib Reduction Ratio");
-	plt.savefig("5.jpg");
+	plt.savefig(savefilename);
 	return tp;
 
 
 
 colors = 'rgbcmyk' # red, green, blue, cyan, magenta, yellow, black
 namesa = ['perth','isc','linux','kinp','sydney','wide','eqix','saopaulo','nmax','telxatl','jinx','soxrs','sg']
-def zhuahungtuBar(info,routename):
+def zhuzhungtuBar(info,routename, savefilename):
 	left = 0;
 	width = 4;
 	bar_groups =[];
@@ -107,13 +107,14 @@ def zhuahungtuBar(info,routename):
 	for names in namesa:
 		string += names + ' ';
 	plt.xlabel(string)
-	plt.savefig("2.jpg");
+	plt.savefig(savefilename);
 	plt.semilogy(1000);
 
 
 
-getASNum("as2addrs.txt")
-'''tp = paintzhexian();
+#getASNum("as2addrs.txt")
+
+tp = paintzhexian("/home/cnpt/wqfile/simbgp/data/finalResult/fibresult/20150502/", "orderedAsn.jpg");
 names = [1,2,3,4,5,6,7,8,9,10,11,12,13]
 
-zhuahungtuBar(tp.values(), names);'''
+zhuzhungtuBar(tp.values(), names, "orderedAsnZZT.jpg");

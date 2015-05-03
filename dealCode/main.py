@@ -41,11 +41,51 @@ def randomAsn(filename, percentage):
 		asNums.append(params[0]);
 	return random.sample(asNums, int(len(asNums)*percentage))
 
+def getOrderedAsn(filename, percentage):
+	f = open(filename, 'r');
+	lines = f.readlines();
+	dicAsn = {};
+	finalres =[];
+	asnnum = 0;
+	for line in lines:
+		asnnum += 1;
+		params = line.split("|");
+		params[1] = int(params[1])
+		if params[1] not in dicAsn.keys():
+			dicAsn[params[1]]=[];
+		dicAsn[params[1]].append(params[0]);
+	res = sorted(dicAsn.iteritems(), key=lambda d:d[0], reverse=True);
+	num = int(asnnum*percentage);
+	for i  in res:
+		for j in i[1]:
+			finalres.append(j);	
+			if len(finalres) >= num:
+				return finalres;
 
-getAsToAddrs("/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/route-views.saopaulo-rib.20150403.0000.out.fib",
+	
+
+
+asns = getOrderedAsn("/home/cnpt/wqfile/simbgp/data/asrel/as2addrsNew.txt", 0.2);
+print asns;
+print "*******************************************************************************";
+reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150502.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150502/","20150502.0000.0.2", asns)
+asns = getOrderedAsn("/home/cnpt/wqfile/simbgp/data/asrel/as2addrsNew.txt", 0.4);
+print asns;
+print "*******************************************************************************";
+reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150502.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150502/","20150502.0000.0.4", asns)
+asns = getOrderedAsn("/home/cnpt/wqfile/simbgp/data/asrel/as2addrsNew.txt", 0.6);
+print asns;
+print "*******************************************************************************";
+reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150502.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150502/","20150502.0000.0.6", asns)
+asns = getOrderedAsn("/home/cnpt/wqfile/simbgp/data/asrel/as2addrsNew.txt", 0.8);
+print asns;
+print "*******************************************************************************";
+reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150502.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150502/","20150502.0000.0.8", asns)
+
+'''getAsToAddrs("/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/route-views.saopaulo-rib.20150403.0000.out.fib",
  "/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.txt")
 
-'''asns = randomAsn("/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.txt", 0.2)
+asns = randomAsn("/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.txt", 0.2)
 reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150422/","20150403.0000.0.2", asns)
 asns = randomAsn("/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.txt", 0.4)
 reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150422/","20150403.0000.0.4", asns)
