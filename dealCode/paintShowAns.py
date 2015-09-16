@@ -1,4 +1,5 @@
 #coding=utf-8
+#Program: use python to draw paint showing results 
 import pylab as plt
 import numpy as np
 import math
@@ -31,8 +32,9 @@ def getASNum(filename):
 	plt.ylabel("Prefix Number");
 	plt.savefig("4.jpg");
 	'''
-	newt2 = sorted(t2);'''
-	print newt2;
+	newt2 = sorted(t2);
+	
+	'''print newt2;
 	newt3 = [];
 	for i in newt2:
 		newt3.append(math.log10(i));
@@ -43,21 +45,42 @@ def getASNum(filename):
 	plt.savefig("7.jpg");'''
 
 	res = [];
-	for i in range(0,len(newt2)):
+	for i in range(1,len(newt2)+1):
 		sum = 0;
 		for j in range(0,i):
 			sum += newt2[j];
-		ave = sum/(i+1);
+		ave = sum*1.0/i;
 		res.append(ave);
+	for i  in range(0, len(newt2)):
+		print str(newt2[i]);
+	for i  in range(0, len(t1)):
+		print str(t1[i]) + "  " + str(res[i]);
 	plt.plot(t1,res);
 	plt.title('Prefix Distribution For ASN');
 	plt.xlabel("Increasing As Quantity Ordered By Prefix Num");
 	plt.ylabel("Average Prefix Number");
 	plt.savefig("6.jpg");
 
+namesa = ['perth','isc','linx','kixp','sydney','wide','eqix','saopaulo','nwax','telxatl','jinx','soxrs','sg']
 
 def paintzhexian(filename,savefilename):
 	colors = 'rgbcmykrgbcmyk'
+	marks='x+vosp*dhH|<2'
+	line1="-."
+	line2="--"
+	line3="-"
+	line4=":"
+	alines=[]
+	for i in range(0,13):
+		alines.append("")
+	alines[0]=line1
+	alines[1]=line2
+	alines[2]=line3
+	alines[3]=line4
+	for i in range(0,13):
+		alines[i]=alines[i%4]
+	print alines
+	alines[11]=line2
 	values = {};
 	tp = {};
 	for i in range(0,13):
@@ -78,19 +101,22 @@ def paintzhexian(filename,savefilename):
 			index+=1;
 		f.close();
 	x = [0.2,0.4,0.6,0.8,1.0];
-	print values.values();
+	#print values.values();
 	for i in values.keys():
-		plt.plot(x, values[i], color=colors[i]);
-	plt.title("13 Routes Fib Reduction Ratio");
-	plt.xlabel("The Propertion Of The New Strategy");
-	plt.ylabel("Fib Reduction Ratio");
+		#print "----------" + colors[i]+marks[i]+lines[i];
+		plt.plot(x, values[i],  colors[i]+marks[i]+alines[i]);
+		if i==0 or i==3 or i==11:
+			plt.text(x[1], values[i][1],namesa[i])
+	plt.title("The trend for proportion of compressed data");
+	plt.xlabel("Proportion of new strategy");
+	plt.ylabel("Proportion of compressed data");
 	plt.savefig(savefilename);
 	return tp;
 
 
 
 colors = 'rgbcmyk' # red, green, blue, cyan, magenta, yellow, black
-namesa = ['perth','isc','linux','kinp','sydney','wide','eqix','saopaulo','nmax','telxatl','jinx','soxrs','sg']
+
 def zhuzhungtuBar(info,routename, savefilename):
 	left = 0;
 	width = 4;
@@ -112,9 +138,9 @@ def zhuzhungtuBar(info,routename, savefilename):
 
 
 
-#getASNum("as2addrs.txt")
+getASNum("as2addrsNew.txt")
 
-tp = paintzhexian("/home/cnpt/wqfile/simbgp/data/finalResult/fibresult/20150502/", "orderedAsn.jpg");
-names = [1,2,3,4,5,6,7,8,9,10,11,12,13]
+#tp = paintzhexian("/home/cnpt/wqfile/simbgp/data/finalResult/fibresult/20150502/", "orderedAsn.jpg");
+#names = [1,2,3,4,5,6,7,8,9,10,11,12,13]
 
-zhuzhungtuBar(tp.values(), names, "orderedAsnZZT.jpg");
+#zhuzhungtuBar(tp.values(), names, "unorderedAsnZZT.jpg");

@@ -13,7 +13,7 @@ def decompressionFiles(sourceDirPath):
 			shfile.write("bunzip2 " + string + "\n")
 	shfile.close()
 
-#run for visual route view
+#use bgpdump to produce the visual text route table
 def libDumpRunCommand(sourceDirPath, destPath, destDir):
 	shfile = open("/home/wq/Work/simbgp/data/shfile/libDumpRunCommand.sh", 'w')
 	if os.path.exists(destPath+destDir+'/'):
@@ -37,6 +37,7 @@ def simBgpCommand(pypath, configpath, shfilepath, num):
 		f.write("python " + pypath + " " + configpath +str(i) + "\n");
 	f.close();
 
+#CABA embedded ASN
 def asn2Ipv6Prefix(asn):
 	ipv6Str = str(hex(int(asn)))
 	res = ''
@@ -46,6 +47,7 @@ def asn2Ipv6Prefix(asn):
 	res+="00"
 	return  res[0:4] + ':' + res[4:8]+':'+res[8:12]+"::"
 
+#produce bgpsim config file
 def produceConfig(filename, asPrefixInfo):
 	f1 = open(asPrefixInfo, 'r');
 	line1 = f1.readline();
@@ -70,35 +72,4 @@ def produceConfig(filename, asPrefixInfo):
 		fw.close();
 		line1 = f1.readline();
 		index+=1;
-	
-	'''f = open(filename, 'r');
-	paras = asPrefixInfo.split("|");
-	outfilename = filename + str(paras[1]);
-	fw = open(outfilename, "w");
-	line = f.readline();
-	routeId = "";
-	while line:
-		fw.write(line);
-		if line == "router bgp " + paras[0] + "\n":
-			line = f.readline();
-			temp = line.split(' ');
-			routeId = temp[-1][0:-1];
-			fw.write(line);
-		line = f.readline();
-	fw.write("event announce-prefix " + routeId + " " + asn2Ipv6Prefix(paras[0]) + " 2.0\n");
-	fw.write("event terminate 40000.0");
-	fw.close();
-	f.close();
-	for i in range(0, int(paras[1])):
-		f = open(filename, 'r');
-		outfilename = filename + str(i);
-		fw = open(outfilename, 'w');
-		line = f.readline();
-		while line:
-			fw.write(line);
-			line = f.readline();
-		fw.write("event announce-prefix " + routeId + " " + paras[2+i] + " 2.0\n");
-		fw.write("event terminate 40000.0");
-		f.close();
-		fw.close();'''
 

@@ -1,5 +1,6 @@
 #https://docs.python.org/3/tutorial/inputoutput.html#methods-of-file-objects
 #FIB
+#one prefix <==> many paths , this function to find the better path (length is shortest and the next hop ASN is smallest)
 def  handleOneRouteInfo(onePrefixInfo):
 	if len(onePrefixInfo) <= 0:
 		return '';
@@ -21,6 +22,7 @@ def  handleOneRouteInfo(onePrefixInfo):
 			minPathNum = len(paths);
 			markIndex = i;
 	return onePrefixInfo[markIndex];
+
 def prefixInfoListToStr(prefixInfos):
 	strTemp = '';
 	for i in range(len(prefixInfos)-1):
@@ -32,8 +34,7 @@ def prefixInfoListToStr(prefixInfos):
 
 
 
-
-
+#RIB---FIB
 def  reduceFIB(inputFile, outFile):
 	f  = open(inputFile, 'r');
 	fw = open(outFile,'w');

@@ -44,7 +44,7 @@ class RouteInfo:
 
 
 
-
+#input route table , output source-as|prefix1|prefix2|......  if the number of source-as is more than one, ignore this data. 
 def getAsToAddrs(inputfile, outputfile):
 	f = open(inputfile, 'r')
 	fw = open(outputfile, 'w')
@@ -98,7 +98,6 @@ def produceAsn(filename, num, outputfile):
 	asPrefixNum = [];
 	asPrefixNum = sorted(asPrefixDistribution.keys());
 	resAs = [];
-	#fw.write("minPrefixNum: " + str(asPrefixNum[0]) + " maxPrefixNum: " + str(asPrefixNum[-1]) + "   num: " +str(num) + "\n");
 	for i in range(0, num):
 		left = len(asPrefixNum)/num*i;
 		right = len(asPrefixNum)/num*(i+1);
@@ -106,31 +105,8 @@ def produceAsn(filename, num, outputfile):
 		randomasn = random.sample(asPrefixDistribution[asPrefixNum[randomvalue]], 1);
 		fw.write(str(randomasn[0]) + " " + asPrefixs[randomasn[0]].split('|')[1] + "\n");
 		resAs.append(asPrefixs[randomasn[0]]);
-	'''for i in resAs:
-		fw.write(i);'''
 
-
-	'''minNum = asnMark[paras[0]];
-	maxNum = asnMark[paras[0]];
-	for i in asnMark.values():
-		if (i > maxNum):
-			maxNum = i;
-		if (i < minNum):
-			minNum = i;
-	print "minNum: "  + str(minNum) + " maxNum: " + str(maxNum)
-	if (maxNum-minNum) == 0:
-		if minNum == 0:
-			return random.sample(asnMark.keys(), 0);
-		else:
-			return random.sample(asnMark.keys(), num);
-	for j in asnMark.keys():
-		asnLevelGather[(asnMark[j]-minNum)/(maxNum-minNum)].append(j);
-	res=[];
-	for i in range(0,num):
-		res.append(random.sample(asnLevelGather[i],1));
-	return res;'''
-
-#return list{fibnum, ipv6fibnum}
+#input FIB table and arranged ASNs, output new FIB table
 def  reduceIpv6Fib(inputfile, outputfile, asns):
 	f  = open(inputfile, 'r');
 	fw = open(outputfile, "w");

@@ -1,8 +1,9 @@
 #encoding=utf-8
 #Name: wang qing 
 #Date: 2015-4-3 Friday
-#Program: download data
+#Program: download data from ftp://archive.routeviews.org/
 #Ref: http://blog.csdn.net/linda1000/article/details/8255771
+
 from ftplib import FTP
 import os
 def ftpconnect(ftp_server_name):
@@ -26,7 +27,8 @@ def downloadfile(filepath,savedir):
     fp.close()
     ftp.quit() #退出ftp服务器
 
-def getDownloadPath(date, time, savedir): #downloadfile("/route-views.eqix/bgpdata/2015.04/RIBS/rib.20150401.0000.bz2")  date:2015.04    time
+#downloadfile("/route-views.eqix/bgpdata/2015.04/RIBS/rib.20150401.0000.bz2", savedir)  date:2015.04    time
+def getDownloadPath(date, time, savedir): 
     savedir = savedir + time + '/'
     if os.path.exists(savedir):
         pass

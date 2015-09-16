@@ -65,6 +65,15 @@ def getOrderedAsn(filename, percentage):
 	
 
 
+#nowsdays  choose arranged ASN
+asns = getOrderedAsn("/home/cnpt/wqfile/simbgp/data/asrel/as2addrsNew.txt", 0.2);
+print asns;
+#choose tier1 ASN
+asns = ['174','209','286','701','1239','1299','2828','2914','3257','4436','3320','3356','4436','5511','6453','6461','6762','7018','12956'];
+print asns;
+reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150502.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150502/","tier1", asns)
+#old days before 2015.6.10
+'''
 asns = getOrderedAsn("/home/cnpt/wqfile/simbgp/data/asrel/as2addrsNew.txt", 0.2);
 print asns;
 print "*******************************************************************************";
@@ -81,7 +90,10 @@ asns = getOrderedAsn("/home/cnpt/wqfile/simbgp/data/asrel/as2addrsNew.txt", 0.8)
 print asns;
 print "*******************************************************************************";
 reduceIpv6FIBs( "/home/cnpt/wqfile/simbgp/data/FIBData/20150502.0000/", "/home/cnpt/wqfile/simbgp/data/Ipv6FIBData/20150502/","20150502.0000.0.8", asns)
+'''
 
+
+#old old days before 2015.5.1
 '''getAsToAddrs("/home/cnpt/wqfile/simbgp/data/FIBData/20150403.0000/route-views.saopaulo-rib.20150403.0000.out.fib",
  "/home/cnpt/wqfile/CABAsimBgp/tempdata/as2addrs.txt")
 
