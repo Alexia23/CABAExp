@@ -36,7 +36,14 @@ def prefixInfoListToStr(prefixInfos):
 	for i in index:
 		strTemp += str(prefixInfos[i]);
 		strTemp +=' '
-	asPath = prefixInfos[6].split(' ');
+	asPath = prefixInfos[6].split(' ')
+	if asPath[-1][0] == "{":
+		asPath[-1] = asPath[-1][1:-1]
+		originAs = asPath[-1].split(",")
+		if len(originAs) != 1:
+			return ""
+		else:
+			asPath[-1] = originAs[0]
 	strTemp += str(asPath[-1]);
 	strTemp += '\n'
 	return strTemp
