@@ -2,9 +2,20 @@ https://docs.docker.com/   docker api
 http://www.nongnu.org/quagga/  download quagga and use quagga
 
 ----------simulate in router viewer data----------
-	1. 从route viewer获得某种格式的rib数据：https://github.com/Alexia23/CABAExp/blob/master/dealCode/downloadData.py
-	2. 安装libbgpdump将某种格式的rib数据转换成可视化的rib数据：https://github.com/Alexia23/CABAExp/tree/master/libbgpdump
-	3. 通过main调用4，5，6的函数完成实验：https://github.com/Alexia23/CABAExp/blob/master/dealCode/main.py
-	4. 脚本批量转换（将某种格式的rib数据转换成可视化的rib数据）：https://github.com/Alexia23/CABAExp/blob/master/dealCode/commandSh.py
-	5. 将rib表转换成fib表：https://github.com/Alexia23/CABAExp/blob/master/dealCode/parser.py
-	6. Caba聚合：https://github.com/Alexia23/CABAExp/blob/master/dealCode/getIpv6Fib.py
+1. 从route viewer获得某种格式的rib数据：
+https://github.com/Alexia23/CABAExp/blob/master/dealCode/downloadData.py
+
+2. 安装libbgpdump将某种格式的rib数据转换成可视化的rib数据：
+https://github.com/Alexia23/CABAExp/tree/master/libbgpdump
+
+3. 通过main调用4，5，6的函数完成实验：
+https://github.com/Alexia23/CABAExp/blob/master/dealCode/main.py
+
+4. 脚本批量转换（将某种格式的rib数据转换成可视化的rib数据）：
+https://github.com/Alexia23/CABAExp/blob/master/dealCode/commandSh.py
+
+5. 将rib表转换成fib表：
+https://github.com/Alexia23/CABAExp/blob/master/dealCode/parser.py
+
+6. Caba聚合：
+https://github.com/Alexia23/CABAExp/blob/master/dealCode/getIpv6Fib.py
